@@ -5,8 +5,8 @@ platform:
   os: linux
   arch: amd64
 steps:
-  - name: greeting
-    image: alpine
+  - name: test
+    image: maven:3-jdk-10
     commands:
-      - echo hello
-      - echo world
+      - mvn install -DskipTests=true -Dmaven.javadoc.skip=true -B -V
+      - mvn test -B
