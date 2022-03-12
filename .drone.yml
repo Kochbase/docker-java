@@ -1,25 +1,3 @@
-global-variables:
-  - &default_docker_settings
-    dockerfile: ./Dockerfile
-  - &default_cache_settings
-    image: drillster/drone-volume-cache
-    settings:
-    volumes:
-      - name: cache
-        path: /cache
-    when:
-      ref:
-        include:
-          - refs/heads/feature/*
-          - refs/heads/master
-          - refs/heads/dev
-          - refs/tags/*
-      event:
-        include:
-          - push
-          - pull_request
-          - tag
-
 kind: pipeline
 name: default
 
@@ -30,7 +8,6 @@ volumes:
 
 steps:
   - name: restore-cache
-    <<: *default_cache_settings
     settings:
       restore: true
       mount:
