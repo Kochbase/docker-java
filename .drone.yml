@@ -6,23 +6,8 @@ platform:
   os: linux
   arch: arm64
 
-volumes:
-  - name: cache
-    host:
-      path: /tmp/cache
-
 steps:
-  - name: unit-test
-    image: maven:3.6.1-jdk-8-slim
-    commands:
-      - mvn -Dmaven.repo.local=/drone/src/.m2/repository test
-    when:
-      branch:
-        include:
-          - feature/*
-          - master
-          - dev
-      event:
-        include:
-          - push
-          - pull_request
+- name: build
+  image: maven:3.6.1-jdk-8-slim
+  commands:
+    - mvn test
