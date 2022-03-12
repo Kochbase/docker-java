@@ -1,13 +1,12 @@
 kind: pipeline
 type: docker
 name: default
-
 platform:
   os: linux
-  arch: arm64
-
+  arch: arm
 steps:
-- name: build
-  image: maven:3.6.1-jdk-8-slim
-  commands:
-    - mvn test
+  - name: greeting
+    image: alpine
+    commands:
+      - echo hello
+      - echo world
