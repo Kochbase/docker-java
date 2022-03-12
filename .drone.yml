@@ -1,0 +1,53 @@
+global-variables:
+  - &default_docker_settings
+    dockerfile: ./Dockerfile
+  - &default_cache_settings
+    image: drillster/drone-volume-cache
+    settings:
+    volumes:
+      - name: cache
+        path: /cache
+    when:
+      ref:
+        include:
+          - refs/heads/feature/*
+          - refs/heads/master
+          - refs/heads/dev
+          - refs/tags/*
+      event:
+        include:
+          - push
+          - pull_request
+          - tag
+
+kind: pipeline
+name: default
+
+volumes:
+  - name: cache
+    host:
+      path: /tmp/cache
+
+steps:
+  - name: restore-cache
+    <<: *default_cache_settings
+    settings:
+      restore: true
+      mount:
+        - ./docker
+        - ./.m2
+
+  - name: unit-test
+    image: maven:3.6.1-jdk-8-slim
+    commands:
+      - mvn -Dmaven.repo.local=/drone/src/.m2/repository test
+    when:
+      branch:
+        include:
+          - feature/*
+          - master
+          - dev
+      event:
+        include:
+          - push
+          - pull_request
