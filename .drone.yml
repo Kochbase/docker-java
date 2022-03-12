@@ -1,4 +1,5 @@
 kind: pipeline
+type: docker
 name: default
 
 platform:
@@ -11,13 +12,6 @@ volumes:
       path: /tmp/cache
 
 steps:
-  - name: restore-cache
-    settings:
-      restore: true
-      mount:
-        - ./docker
-        - ./.m2
-
   - name: unit-test
     image: maven:3.6.1-jdk-8-slim
     commands:
