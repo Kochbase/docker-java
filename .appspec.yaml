@@ -1,0 +1,28 @@
+alerts:
+  - rule: DEPLOYMENT_FAILED
+  - rule: DOMAIN_FAILED
+name: kochbase-docker-java
+region: fra
+services:
+  - dockerfile_path: Dockerfile
+    github:
+      branch: master
+      deploy_on_push: true
+      repo: Kochbase/docker-java
+    http_port: 8080
+    instance_count: 1
+    instance_size_slug: basic-xs
+    name: kochbase-docker-java
+    routes:
+      - path: /
+    source_dir: /
+jobs:
+  - name: pre-deploy
+    github:
+      branch: master
+      deploy_on_push: true
+      repo: Kochbase/docker-java
+    environment_slug: docker
+    build_command: mvn clean package
+    run_command: mvn clean package
+    kind: PRE_DEPLOY
